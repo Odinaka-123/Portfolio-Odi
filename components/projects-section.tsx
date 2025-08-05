@@ -1,40 +1,55 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { ExternalLink, Github } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { ExternalLink, Github } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const projects = [
   {
     title: "Data Breach Detector",
     description:
       "A modern e-commerce website built with Next.js and Stripe integration. Features include product catalog, shopping cart, and secure checkout process.",
-    image: "/placeholder.svg?height=300&width=400",
+    image: "https://ik.imagekit.io/ovkmq81lc/Magenfront.png?updatedAt=1754414707868",
     technologies: ["Next.js", "Tailwind CSS", "MongoDB"],
+    codeUrl: "https://github.com/Odinaka-123/MAGEN",
+    liveUrl: "https://magan.vercel.app",
   },
   {
     title: "Portfolio Website",
     description:
       "A responsive portfolio website for a creative agency. Includes animated sections, project galleries, and contact forms with smooth user experience.",
-    image: "/placeholder.svg?height=300&width=400",
+    image: "https://ik.imagekit.io/ovkmq81lc/portfoliohero.png?updatedAt=1754416856645",
     technologies: ["React", "Tailwind CSS", "Netlify"],
+    codeUrl: "https://github.com/Odinaka-123/Portfolio-Odi",
+    liveUrl: "https://portfolio-odi.netlify.app",
   },
   {
-    title: "Task Management App",
+    title: "Kruscat",
     description:
       "A collaborative task management application with real-time updates, team collaboration features, and intuitive drag-and-drop interface.",
-    image: "/placeholder.svg?height=300&width=400",
+    image: "https://ik.imagekit.io/ovkmq81lc/kruscathero.jpg?updatedAt=1754417974715",
     technologies: ["React", "Node.js", "Socket.io", "PostgreSQL"],
+    codeUrl: "https://github.com/Kruscat/",
+    liveUrl: "https://kruscat.com", 
   },
-]
+];
 
 export function ProjectsSection() {
   return (
     <section id="projects" className="py-20 px-4 bg-gray-50 dark:bg-gray-800">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">Featured Projects</h2>
-          <div className="w-24 h-1 bg-blue-500 mx-auto rounded-full"></div>
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+            Featured Projects
+          </h2>
+          <div className="w-24 h-1 bg-blue-500 mx-auto rounded-full" />
           <p className="text-xl text-gray-600 dark:text-gray-400 mt-6 max-w-2xl mx-auto">
-            Here are some of my recent projects that showcase my skills in web development and design
+            Here are some of my recent projects that showcase my skills in web
+            development and design
           </p>
         </div>
 
@@ -50,11 +65,12 @@ export function ProjectsSection() {
                   alt={project.title}
                   className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                 />
-                <div className="absolute inset-0 bg-opacity-0 bg-black group-hover:bg-opacity-20 transition-all duration-300"></div>
               </div>
 
               <CardHeader>
-                <CardTitle className="text-xl font-bold text-gray-900 dark:text-white">{project.title}</CardTitle>
+                <CardTitle className="text-xl font-bold text-gray-900 dark:text-white">
+                  {project.title}
+                </CardTitle>
               </CardHeader>
 
               <CardContent className="space-y-4">
@@ -74,18 +90,35 @@ export function ProjectsSection() {
                 </div>
 
                 <div className="flex gap-3 pt-4">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="rounded-full bg-transparent dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800"
-                  >
-                    <Github className="w-4 h-4 mr-2" />
-                    Code
-                  </Button>
-                  <Button size="sm" className="rounded-full">
-                    <ExternalLink className="w-4 h-4 mr-2" />
-                    Live Demo
-                  </Button>
+                  {project.codeUrl && (
+                    <a
+                      href={project.codeUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="rounded-full bg-transparent dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800"
+                      >
+                        <Github className="w-4 h-4 mr-2" />
+                        Code
+                      </Button>
+                    </a>
+                  )}
+
+                  {project.liveUrl && (
+                    <a
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Button size="sm" className="rounded-full">
+                        <ExternalLink className="w-4 h-4 mr-2" />
+                        Live Demo
+                      </Button>
+                    </a>
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -93,5 +126,5 @@ export function ProjectsSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

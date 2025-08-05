@@ -13,7 +13,7 @@ export function ProfileHero() {
       <div className="text-center max-w-4xl mx-auto">
         <div className="mb-8">
           <img
-            src="/placeholder.svg?height=200&width=200"
+            src="https://ik.imagekit.io/ovkmq81lc/linkdln1.jpg?updatedAt=1754413915965"
             alt="Profile Photo"
             className="w-48 h-48 rounded-full mx-auto mb-6 shadow-2xl border-4 border-white dark:border-gray-700 object-cover"
           />
