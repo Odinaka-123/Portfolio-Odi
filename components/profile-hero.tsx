@@ -21,7 +21,7 @@ export function ProfileHero() {
             Odi Ezurike
           </h1>
           <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 font-light">
-            Web Developer & Virtual Assistant
+            Software Engineer | Front-End
           </p>
           <p className="text-lg text-gray-500 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
             Creating seamless digital experiences with a passion for design and functionality

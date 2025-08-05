@@ -4,18 +4,18 @@ import { Button } from "@/components/ui/button"
 
 const projects = [
   {
-    title: "E-Commerce Platform",
+    title: "Data Breach Detector",
     description:
       "A modern e-commerce website built with Next.js and Stripe integration. Features include product catalog, shopping cart, and secure checkout process.",
     image: "/placeholder.svg?height=300&width=400",
-    technologies: ["Next.js", "Tailwind CSS", "Stripe", "MongoDB"],
+    technologies: ["Next.js", "Tailwind CSS", "MongoDB"],
   },
   {
     title: "Portfolio Website",
     description:
       "A responsive portfolio website for a creative agency. Includes animated sections, project galleries, and contact forms with smooth user experience.",
     image: "/placeholder.svg?height=300&width=400",
-    technologies: ["React", "Framer Motion", "Tailwind CSS", "Netlify"],
+    technologies: ["React", "Tailwind CSS", "Netlify"],
   },
   {
     title: "Task Management App",
@@ -50,7 +50,7 @@ export function ProjectsSection() {
                   alt={project.title}
                   className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                 />
-                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300"></div>
+                <div className="absolute inset-0 bg-opacity-0 bg-black group-hover:bg-opacity-20 transition-all duration-300"></div>
               </div>
 
               <CardHeader>
