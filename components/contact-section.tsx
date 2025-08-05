@@ -21,9 +21,8 @@ export function ContactSection() {
     const formData = new FormData(e.currentTarget)
 
     try {
-      // Replace this URL with your actual Formspree endpoint
-      // Example: https://formspree.io/f/your-form-id
-      const response = await fetch("https://formspree.io/f/YOUR_FORM_ID", {
+
+      const response = await fetch("https://formspree.io/f/xgvznnrg", {
         method: "POST",
         body: formData,
         headers: {

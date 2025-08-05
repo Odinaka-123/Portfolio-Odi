@@ -11,6 +11,9 @@ export const metadata: Metadata = {
   title: "Odi Ezurike - Software Engineer | Front-End",
   description:
     "Passionate about creating seamless digital experiences. Web developer and virtual assistant with expertise in design and functionality.",
+      icons: {
+      icon: "/favicon.ico",
+      }
 }
 
 export default function RootLayout({
