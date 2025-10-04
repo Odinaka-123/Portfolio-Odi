@@ -121,3 +121,37 @@
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes curtainLeftOpen {
+  0% {
+    transform: translateX(0);
+  }
+  30% {
+    transform: translateX(-10%); 
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes curtainRightOpen {
+  0% {
+    transform: translateX(0);
+  }
+  30% {
+    transform: translateX(10%); 
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-curtainLeftOpen {
+  animation: curtainLeftOpen 1.8s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+}
+
+.animate-curtainRightOpen {
+  animation: curtainRightOpen 1.8s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+}
+
+
