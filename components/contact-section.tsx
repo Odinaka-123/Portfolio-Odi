@@ -1,197 +1,373 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Mail, Phone, MapPin, Send } from "lucide-react"
-import { useToast } from "@/hooks/use-toast"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Mail, Phone, MapPin, Send, ArrowUpRight } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 export function ContactSection() {
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const { toast } = useToast()
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setIsSubmitting(true)
+    e.preventDefault();
+    setIsSubmitting(true);
 
-    const formData = new FormData(e.currentTarget)
+    const formData = new FormData(e.currentTarget);
 
     try {
-
       const response = await fetch("https://formspree.io/f/xgvznnrg", {
         method: "POST",
         body: formData,
         headers: {
           Accept: "application/json",
         },
-      })
+      });
 
       if (response.ok) {
         toast({
           title: "Message sent successfully!",
           description: "Thank you for reaching out. I'll get back to you soon.",
-        })
-        ;(e.target as HTMLFormElement).reset()
+        });
+        (e.target as HTMLFormElement).reset();
       } else {
-        throw new Error("Failed to send message")
+        throw new Error("Failed to send message");
       }
     } catch (error) {
       toast({
         title: "Error sending message",
         description: "Please try again or contact me directly via email.",
         variant: "destructive",
-      })
+      });
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   return (
     <section
       id="contact"
-      className="py-20 px-4 bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-blue-900"
+      className="py-24 sm:py-32 px-6"
+      style={{ background: "#09090f" }}
     >
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">Let's Work Together</h2>
-          <div className="w-24 h-1 bg-blue-500 mx-auto rounded-full"></div>
-          <p className="text-xl text-gray-600 dark:text-gray-400 mt-6 max-w-2xl mx-auto">
-            Ready to bring your ideas to life? Get in touch and let's create something amazing together!
+        {/* Header */}
+        <div className="mb-16 text-center">
+          <p
+            className="text-xs uppercase tracking-[2.5px] mb-4 flex items-center justify-center gap-3"
+            style={{
+              fontFamily: "Inter, sans-serif",
+              color: "rgba(110,231,247,0.7)",
+            }}
+          >
+            <span
+              style={{
+                display: "block",
+                width: 20,
+                height: 1,
+                background: "rgba(110,231,247,0.6)",
+              }}
+            />
+            Contact
+            <span
+              style={{
+                display: "block",
+                width: 20,
+                height: 1,
+                background: "rgba(110,231,247,0.6)",
+              }}
+            />
+          </p>
+          <h2
+            className="text-3xl sm:text-4xl md:text-5xl font-bold text-white"
+            style={{
+              fontFamily: "Space Grotesk, sans-serif",
+              letterSpacing: "-1.5px",
+            }}
+          >
+            Let's work{" "}
+            <span style={{ color: "rgba(255,255,255,0.2)", fontWeight: 300 }}>
+              together
+            </span>
+          </h2>
+          <p
+            className="mt-4 text-sm max-w-xl mx-auto"
+            style={{
+              fontFamily: "Inter, sans-serif",
+              color: "rgba(255,255,255,0.4)",
+              lineHeight: 1.7,
+            }}
+          >
+            Ready to bring your ideas to life? Get in touch and let's create
+            something amazing together.
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-12">
+        <div className="grid lg:grid-cols-[1fr_1.4fr] gap-8">
           {/* Contact Info */}
-          <div className="space-y-8">
-            <div>
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Get In Touch</h3>
-              <p className="text-gray-600 dark:text-gray-400 text-lg leading-relaxed mb-8">
-                I'm always excited to work on new projects and collaborate with amazing people. Whether you need web
-                development, design work, or virtual assistance, I'm here to help.
+          <div className="flex flex-col gap-4">
+            <ContactCard
+              icon={<Mail size={18} />}
+              label="Email"
+              value="ezurikeodinaka@gmail.com"
+              href="mailto:ezurikeodinaka@gmail.com"
+              color="#6EE7F7"
+            />
+            <ContactCard
+              icon={<Phone size={18} />}
+              label="Phone"
+              value="+(234) 703-008-5246"
+              href="tel:+2347030085246"
+              color="#34d399"
+            />
+            <ContactCard
+              icon={<MapPin size={18} />}
+              label="Location"
+              value="Lagos, Nigeria"
+              color="#a78bfa"
+            />
+
+            <div
+              className="rounded-2xl p-6 mt-2 flex-1 flex flex-col justify-center"
+              style={{
+                background: "linear-gradient(160deg, #12121e 0%, #0c0c18 100%)",
+                border: "1px solid rgba(255,255,255,0.06)",
+              }}
+            >
+              <p
+                style={{
+                  fontFamily: "Inter, sans-serif",
+                  fontSize: 13,
+                  color: "rgba(255,255,255,0.4)",
+                  lineHeight: 1.8,
+                }}
+              >
+                I'm always excited to work on new projects and collaborate with
+                amazing people. Whether you need web development, design work,
+                or virtual assistance, I'm here to help.
               </p>
-            </div>
-
-            <div className="space-y-6">
-              <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
-                  <Mail className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900 dark:text-white">Email</h4>
-                  <p className="text-gray-600 dark:text-gray-400">ezurikeodinaka@gmail.com</p>
-                </div>
-              </div>
-
-              <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
-                  <Phone className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900 dark:text-white">Phone</h4>
-                  <p className="text-gray-600 dark:text-gray-400">+(234) 703-008-5246</p>
-                </div>
-              </div>
-
-              <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
-                  <MapPin className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900 dark:text-white">Location</h4>
-                  <p className="text-gray-600 dark:text-gray-400">Lagos, Nigeria</p>
-                </div>
-              </div>
             </div>
           </div>
 
           {/* Contact Form */}
-          <Card className="rounded-2xl shadow-xl bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700">
-            <CardHeader>
-              <CardTitle className="text-2xl font-bold text-gray-900 dark:text-white">Send a Message</CardTitle>
-              <CardDescription className="text-gray-600 dark:text-gray-400">
-                Fill out the form below and I'll get back to you as soon as possible.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
+          <div
+            className="rounded-2xl relative overflow-hidden"
+            style={{
+              background: "linear-gradient(160deg, #12121e 0%, #0c0c18 100%)",
+              border: "1px solid rgba(255,255,255,0.06)",
+            }}
+          >
+            {/* Top accent */}
+            <div
+              className="h-[3px] w-full"
+              style={{
+                background: "linear-gradient(90deg, #6EE7F7, transparent)",
+              }}
+            />
+
+            <div className="p-6 sm:p-8">
+              <h3
+                className="text-white font-bold mb-1"
+                style={{
+                  fontFamily: "Space Grotesk, sans-serif",
+                  fontSize: 20,
+                  letterSpacing: "-0.4px",
+                }}
+              >
+                Send a message
+              </h3>
+              <p
+                className="mb-6"
+                style={{
+                  fontFamily: "Inter, sans-serif",
+                  fontSize: 13,
+                  color: "rgba(255,255,255,0.35)",
+                }}
+              >
+                Fill out the form below and I'll get back to you as soon as
+                possible.
+              </p>
+
               <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Name *
-                    </label>
+                <div className="grid sm:grid-cols-2 gap-5">
+                  <Field label="Name" required>
                     <Input
                       id="name"
                       name="name"
                       type="text"
                       required
-                      className="rounded-xl bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white"
                       placeholder="Your full name"
+                      className="rounded-xl h-12 px-4 text-[14px] bg-[#0c0c18] border-white/[0.08] text-white placeholder:text-white/20 transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-offset-0 focus-visible:ring-[#6EE7F7]/30 focus-visible:border-[#6EE7F7]/50 hover:border-white/15"
                     />
-                  </div>
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Email *
-                    </label>
+                  </Field>
+                  <Field label="Email" required>
                     <Input
                       id="email"
                       name="email"
                       type="email"
                       required
-                      className="rounded-xl bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white"
                       placeholder="your.email@example.com"
+                      className="rounded-xl h-12 px-4 text-[14px] bg-[#0c0c18] border-white/[0.08] text-white placeholder:text-white/20 transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-offset-0 focus-visible:ring-[#6EE7F7]/30 focus-visible:border-[#6EE7F7]/50 hover:border-white/15"
                     />
-                  </div>
+                  </Field>
                 </div>
 
-                <div>
-                  <label htmlFor="subject" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Subject
-                  </label>
+                <Field label="Subject">
                   <Input
                     id="subject"
                     name="subject"
                     type="text"
-                    className="rounded-xl bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white"
                     placeholder="What's this about?"
+                    className="rounded-xl h-12 px-4 text-[14px] bg-[#0c0c18] border-white/[0.08] text-white placeholder:text-white/20 transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-offset-0 focus-visible:ring-[#6EE7F7]/30 focus-visible:border-[#6EE7F7]/50 hover:border-white/15"
                   />
-                </div>
+                </Field>
 
-                <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Message *
-                  </label>
+                <Field label="Message" required>
                   <Textarea
                     id="message"
                     name="message"
                     required
                     rows={5}
-                    className="rounded-xl resize-none bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white"
                     placeholder="Tell me about your project or how I can help you..."
+                    className="rounded-xl resize-none px-4 py-3 text-[14px] bg-[#0c0c18] border-white/[0.08] text-white placeholder:text-white/20 transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-offset-0 focus-visible:ring-[#6EE7F7]/30 focus-visible:border-[#6EE7F7]/50 hover:border-white/15"
                   />
-                </div>
+                </Field>
 
-                <Button type="submit" disabled={isSubmitting} className="w-full rounded-xl py-6 text-lg font-semibold">
-                  {isSubmitting ? (
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full rounded-xl h-12 text-sm font-semibold flex items-center justify-center gap-2 transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed hover:brightness-110 active:scale-[0.99]"
+                  style={{
+                    fontFamily: "Inter, sans-serif",
+                    color: "#09090f",
+                    background: "#6EE7F7",
+                    boxShadow: "0 8px 24px -8px #6EE7F766",
+                  }}
+                >
+                  {isSubmitting ?
                     <>
-                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                      <div className="animate-spin rounded-full h-4 w-4 border-2 border-[#09090f]/25 border-t-[#09090f]" />
                       Sending...
                     </>
-                  ) : (
-                    <>
-                      <Send className="w-5 h-5 mr-2" />
-                      Send Message
+                  : <>
+                      <Send size={15} />
+                      Send message
                     </>
-                  )}
-                </Button>
+                  }
+                </button>
               </form>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
       </div>
     </section>
-  )
+  );
+}
+
+function Field({
+  label,
+  required,
+  children,
+}: {
+  label: string;
+  required?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <div>
+      <label
+        className="block mb-2.5"
+        style={{
+          fontFamily: "Inter, sans-serif",
+          fontSize: 12,
+          fontWeight: 500,
+          color: "rgba(255,255,255,0.45)",
+          letterSpacing: "0.5px",
+          textTransform: "uppercase",
+        }}
+      >
+        {label} {required && <span style={{ color: "#6EE7F7" }}>*</span>}
+      </label>
+      {children}
+    </div>
+  );
+}
+
+function ContactCard({
+  icon,
+  label,
+  value,
+  href,
+  color,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+  href?: string;
+  color: string;
+}) {
+  const content = (
+    <div
+      className="rounded-2xl p-5 flex items-center gap-4 group transition-all duration-200"
+      style={{
+        background: "linear-gradient(160deg, #12121e 0%, #0c0c18 100%)",
+        border: "1px solid rgba(255,255,255,0.06)",
+      }}
+    >
+      <div
+        className="flex items-center justify-center rounded-xl flex-shrink-0"
+        style={{
+          width: 44,
+          height: 44,
+          color: color,
+          background: color + "15",
+          border: `1px solid ${color}30`,
+        }}
+      >
+        {icon}
+      </div>
+      <div className="flex-1 min-w-0">
+        <p
+          className="text-[10px] uppercase tracking-[1.5px] mb-1"
+          style={{
+            fontFamily: "Inter, sans-serif",
+            color: "rgba(255,255,255,0.3)",
+          }}
+        >
+          {label}
+        </p>
+        <p
+          className="truncate"
+          style={{
+            fontFamily: "Inter, sans-serif",
+            fontSize: 14,
+            color: "rgba(255,255,255,0.85)",
+          }}
+        >
+          {value}
+        </p>
+      </div>
+      {href && (
+        <ArrowUpRight
+          size={16}
+          className="flex-shrink-0 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+          style={{ color: "rgba(255,255,255,0.2)" }}
+        />
+      )}
+    </div>
+  );
+
+  if (href) {
+    return (
+      <a href={href} className="block" style={{ textDecoration: "none" }}>
+        {content}
+      </a>
+    );
+  }
+
+  return content;
 }
