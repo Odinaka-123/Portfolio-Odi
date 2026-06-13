@@ -54,7 +54,30 @@ const HIGHLIGHTS: Highlight[] = [
   },
 ];
 
-function useInView(threshold = 0.3): { ref: React.RefObject<HTMLDivElement | null>; visible: boolean } {
+const STACK = [
+  { icon: "devicon-react-original", label: "React" },
+  { icon: "devicon-nextjs-plain", label: "Next.js" },
+  { icon: "devicon-nodejs-plain", label: "Node.js" },
+  { icon: "devicon-postgresql-plain", label: "PostgreSQL" },
+  { icon: "devicon-mongodb-plain", label: "MongoDB" },
+  { icon: "devicon-flutter-plain", label: "Flutter" },
+  { icon: "devicon-electron-original", label: "Electron" },
+  { icon: "devicon-python-plain", label: "Python" },
+  { icon: "devicon-pytorch-plain", label: "PyTorch" },
+  { icon: "devicon-typescript-plain", label: "TypeScript" },
+  { icon: "devicon-javascript-plain", label: "JavaScript" },
+  { icon: "devicon-tailwindcss-plain", label: "Tailwind" },
+  { icon: "devicon-firebase-plain", label: "Firebase" },
+  { icon: "devicon-supabase-plain", label: "Supabase" },
+  { icon: "devicon-opencv-plain", label: "OpenCV" },
+  { icon: "devicon-cplusplus-plain", label: "C++" },
+  { icon: "devicon-dart-plain", label: "Dart" },
+];
+
+function useInView(threshold = 0.3): {
+  ref: React.RefObject<HTMLDivElement | null>;
+  visible: boolean;
+} {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState<boolean>(false);
   useEffect(() => {
@@ -62,9 +85,12 @@ function useInView(threshold = 0.3): { ref: React.RefObject<HTMLDivElement | nul
     if (!el) return;
     const obs = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) { setVisible(true); obs.disconnect(); }
+        if (entry.isIntersecting) {
+          setVisible(true);
+          obs.disconnect();
+        }
       },
-      { threshold }
+      { threshold },
     );
     obs.observe(el);
     return () => obs.disconnect();
@@ -105,7 +131,10 @@ function StatCard({ value, label, index }: StatCardProps) {
       </span>
       <span
         className="text-xs uppercase tracking-widest text-center"
-        style={{ fontFamily: "Inter, sans-serif", color: "rgba(255,255,255,0.35)" }}
+        style={{
+          fontFamily: "Inter, sans-serif",
+          color: "rgba(255,255,255,0.35)",
+        }}
       >
         {label}
       </span>
@@ -135,7 +164,8 @@ function HighlightCard({
       onMouseLeave={() => setHovered(false)}
       className="relative rounded-2xl p-6 flex flex-col gap-3"
       style={{
-        background: hovered ? "rgba(110,231,247,0.04)" : "rgba(255,255,255,0.02)",
+        background:
+          hovered ? "rgba(110,231,247,0.04)" : "rgba(255,255,255,0.02)",
         border: `1px solid ${hovered ? "rgba(110,231,247,0.2)" : "rgba(255,255,255,0.06)"}`,
         opacity: visible ? 1 : 0,
         transform: visible ? "translateY(0)" : "translateY(24px)",
@@ -158,7 +188,9 @@ function HighlightCard({
           href={href}
           target="_blank"
           rel="noopener noreferrer"
-          onClick={(e: React.MouseEvent<HTMLAnchorElement>) => e.stopPropagation()}
+          onClick={(e: React.MouseEvent<HTMLAnchorElement>) =>
+            e.stopPropagation()
+          }
           style={{
             opacity: hovered ? 0.5 : 0,
             transition: "opacity 0.2s",
@@ -183,7 +215,10 @@ function HighlightCard({
         </h3>
         <p
           className="text-[11px] uppercase tracking-wider"
-          style={{ fontFamily: "Inter, sans-serif", color: "rgba(110,231,247,0.55)" }}
+          style={{
+            fontFamily: "Inter, sans-serif",
+            color: "rgba(110,231,247,0.55)",
+          }}
         >
           {sub}
         </p>
@@ -203,17 +238,53 @@ function HighlightCard({
   );
 }
 
+interface StackChipProps {
+  icon: string;
+  label: string;
+  index: number;
+}
+
+function StackChip({ icon, label, index }: StackChipProps) {
+  const { ref, visible } = useInView(0.2);
+  const [hovered, setHovered] = useState(false);
+
+  return (
+    <div
+      ref={ref}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl"
+      style={{
+        background:
+          hovered ? "rgba(110,231,247,0.04)" : "rgba(255,255,255,0.02)",
+        border: `1px solid ${hovered ? "rgba(110,231,247,0.2)" : "rgba(255,255,255,0.06)"}`,
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(16px)",
+        transition: `opacity 0.45s ease ${index * 0.04}s, transform 0.45s ease ${index * 0.04}s, background 0.2s, border-color 0.2s`,
+      }}
+    >
+      <i className={`${icon} colored`} style={{ fontSize: 18 }} />
+      <span
+        style={{
+          fontFamily: "Inter, sans-serif",
+          fontSize: 13,
+          color: hovered ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.45)",
+          transition: "color 0.2s",
+        }}
+      >
+        {label}
+      </span>
+    </div>
+  );
+}
+
 interface NavLinkProps {
   href: string;
   icon: React.ElementType;
   label: string;
 }
 
-function NavLink({
-  href,
-  icon: Icon,
-  label,
-}: NavLinkProps) {
+function NavLink({ href, icon: Icon, label }: NavLinkProps) {
   const [hovered, setHovered] = useState<boolean>(false);
   return (
     <a
@@ -239,6 +310,7 @@ function NavLink({
 
 export function AboutSection(): React.ReactElement {
   const { ref: headerRef, visible: headerVisible } = useInView(0.3);
+  const { ref: stackHeaderRef, visible: stackHeaderVisible } = useInView(0.3);
 
   return (
     <section
@@ -246,6 +318,12 @@ export function AboutSection(): React.ReactElement {
       className="py-28 px-6 relative overflow-hidden"
       style={{ background: "#09090f" }}
     >
+      {/* Devicons CDN */}
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"
+      />
+
       {/* Grid */}
       <div
         className="absolute inset-0 pointer-events-none"
@@ -267,7 +345,8 @@ export function AboutSection(): React.ReactElement {
           width: 500,
           height: 500,
           borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(110,231,247,0.04) 0%, transparent 70%)",
+          background:
+            "radial-gradient(circle, rgba(110,231,247,0.04) 0%, transparent 70%)",
           transform: "translate(-50%, -50%)",
         }}
       />
@@ -285,7 +364,10 @@ export function AboutSection(): React.ReactElement {
         >
           <p
             className="text-xs uppercase tracking-[2.5px] mb-4 flex items-center gap-3"
-            style={{ fontFamily: "Inter, sans-serif", color: "rgba(110,231,247,0.7)" }}
+            style={{
+              fontFamily: "Inter, sans-serif",
+              color: "rgba(110,231,247,0.7)",
+            }}
           >
             <span
               style={{
@@ -306,7 +388,9 @@ export function AboutSection(): React.ReactElement {
             }}
           >
             Engineer. Founder.{" "}
-            <span style={{ color: "rgba(255,255,255,0.2)", fontWeight: 300 }}>Builder.</span>
+            <span style={{ color: "rgba(255,255,255,0.2)", fontWeight: 300 }}>
+              Builder.
+            </span>
           </h2>
 
           <p
@@ -323,20 +407,34 @@ export function AboutSection(): React.ReactElement {
               href="https://kakkatech.com"
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: "rgba(110,231,247,0.75)", textDecoration: "underline", textUnderlineOffset: 3 }}
+              style={{
+                color: "rgba(110,231,247,0.75)",
+                textDecoration: "underline",
+                textUnderlineOffset: 3,
+              }}
             >
               Kakkatech
             </a>
-            , a digital agency building growth engines for businesses. I&apos;ve shipped 52+ projects
-            across the full stack, created my own programming language (EasyScript) complete with a
-            VSCode extension, and I operate at the intersection of engineering precision and product
-            thinking. I don&apos;t just write code — I architect systems that scale.
+            , a digital agency building growth engines for businesses. I&apos;ve
+            shipped 52+ projects across the full stack, created my own
+            programming language (EasyScript) complete with a VSCode extension,
+            and I operate at the intersection of engineering precision and
+            product thinking. I don&apos;t just write code — I architect systems
+            that scale.
           </p>
 
           <div className="flex items-center gap-5 mt-6">
-            <NavLink href="https://github.com/Odinaka-123" icon={Github} label="github.com/Odinaka-123" />
+            <NavLink
+              href="https://github.com/Odinaka-123"
+              icon={Github}
+              label="github.com/Odinaka-123"
+            />
             <span style={{ color: "rgba(255,255,255,0.1)" }}>·</span>
-            <NavLink href="https://kakkatech.com" icon={Globe} label="kakkatech.com" />
+            <NavLink
+              href="https://kakkatech.com"
+              icon={Globe}
+              label="kakkatech.com"
+            />
           </div>
         </div>
 
@@ -348,9 +446,43 @@ export function AboutSection(): React.ReactElement {
         </div>
 
         {/* Highlights */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-16">
           {HIGHLIGHTS.map((h, i) => (
             <HighlightCard key={h.title} {...h} index={i} />
+          ))}
+        </div>
+
+        {/* Stack */}
+        <div
+          ref={stackHeaderRef}
+          style={{
+            opacity: stackHeaderVisible ? 1 : 0,
+            transform:
+              stackHeaderVisible ? "translateY(0)" : "translateY(16px)",
+            transition: "opacity 0.5s ease, transform 0.5s ease",
+          }}
+        >
+          <p
+            className="text-xs uppercase tracking-[2.5px] mb-5 flex items-center gap-3"
+            style={{
+              fontFamily: "Inter, sans-serif",
+              color: "rgba(110,231,247,0.7)",
+            }}
+          >
+            <span
+              style={{
+                display: "block",
+                width: 20,
+                height: 1,
+                background: "rgba(110,231,247,0.6)",
+              }}
+            />
+            Stack
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-3">
+          {STACK.map((s, i) => (
+            <StackChip key={s.label} icon={s.icon} label={s.label} index={i} />
           ))}
         </div>
       </div>
