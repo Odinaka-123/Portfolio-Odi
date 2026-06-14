@@ -20,7 +20,6 @@ interface IdCardProps {
 }
 
 const ROPE_SEGMENTS = 22;
-const ANCHOR_X_RATIO = 0.78;
 const CARD_W = 230;
 const CARD_H = 330;
 const STRAP_W = 16;
@@ -55,6 +54,7 @@ export function IdCard({
   initialized,
   onSkillsClick,
 }: IdCardProps) {
+  const svgContainerRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const animFrameRef = useRef<number>(0);
   const isDragging = useRef(false);
@@ -78,22 +78,24 @@ export function IdCard({
   const [anchorX, setAnchorX] = useState(0);
   const [isPinned, setIsPinned] = useState(false);
 
+  const getContainer = useCallback(() => svgContainerRef.current, []);
+
   const getPinnedPos = useCallback(() => {
-    const container = containerRef.current;
+    const container = getContainer();
     if (!container) return { x: 0, y: 0 };
     const rect = container.getBoundingClientRect();
     return {
-      x: rect.width * ANCHOR_X_RATIO,
+      x: rect.width * 0.5,
       y: rect.height * PINNED_Y_RATIO,
     };
-  }, [containerRef]);
+  }, [getContainer]);
 
   // Init — park card above viewport
   useEffect(() => {
-    const container = containerRef.current;
+    const container = getContainer();
     if (!container || !initialized) return;
     const rect = container.getBoundingClientRect();
-    const ax = rect.width * ANCHOR_X_RATIO;
+    const ax = rect.width * 0.5;
     setAnchorX(ax);
     physics.current.x = ax;
     physics.current.y = -CARD_H;
@@ -107,12 +109,13 @@ export function IdCard({
     }));
     setCardPos({ x: ax, y: -CARD_H });
     setRopePoints([...physics.current.ropePoints]);
-  }, [initialized, containerRef]);
+    hasKicked.current = false;
+  }, [initialized, getContainer]);
 
   // Physics loop
   useEffect(() => {
     if (!initialized) return;
-    const container = containerRef.current;
+    const container = getContainer();
     if (!container) return;
 
     const GRAVITY = 0.6;
@@ -123,12 +126,12 @@ export function IdCard({
     const simulate = () => {
       const p = physics.current;
       const rect = container.getBoundingClientRect();
-      const ax = rect.width * ANCHOR_X_RATIO;
+      const ax = rect.width * 0.5;
       const ay = 0;
 
-      // Drop on first frame
       if (!hasKicked.current) {
         hasKicked.current = true;
+        p.x = ax;
         p.y = -10;
         p.vy = 12;
         p.vx = 0;
@@ -213,9 +216,8 @@ export function IdCard({
 
     animFrameRef.current = requestAnimationFrame(simulate);
     return () => cancelAnimationFrame(animFrameRef.current);
-  }, [initialized, containerRef, getPinnedPos]);
+  }, [initialized, getContainer, getPinnedPos]);
 
-  // Mouse / touch events
   const onMouseDown = (e: React.MouseEvent) => {
     isDragging.current = true;
     lastMouse.current = { x: e.clientX, y: e.clientY };
@@ -225,7 +227,7 @@ export function IdCard({
   useEffect(() => {
     const onMouseMove = (e: MouseEvent) => {
       if (!isDragging.current) return;
-      const container = containerRef.current;
+      const container = getContainer();
       if (!container) return;
       const rect = container.getBoundingClientRect();
       const p = physics.current;
@@ -245,7 +247,7 @@ export function IdCard({
     };
     const onTouchMove = (e: TouchEvent) => {
       if (!isDragging.current) return;
-      const container = containerRef.current;
+      const container = getContainer();
       if (!container) return;
       const rect = container.getBoundingClientRect();
       const touch = e.touches[0];
@@ -267,7 +269,7 @@ export function IdCard({
       window.removeEventListener("touchmove", onTouchMove);
       window.removeEventListener("touchend", onMouseUp);
     };
-  }, [containerRef]);
+  }, [getContainer]);
 
   const handlePin = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -316,7 +318,7 @@ export function IdCard({
   const tipPt = ropePoints[ropePoints.length - 1];
 
   return (
-    <div className="absolute inset-0 pointer-events-none">
+    <div ref={svgContainerRef} className="absolute inset-0 pointer-events-none">
       <svg
         className="absolute inset-0 w-full h-full"
         style={{ pointerEvents: "none" }}
@@ -366,7 +368,7 @@ export function IdCard({
           strokeWidth={1.2}
         />
 
-        {/* Strap */}
+        {/* Strap body */}
         <path
           d={strapOutline}
           fill="url(#lanyardStripe)"
@@ -429,7 +431,7 @@ export function IdCard({
         onTouchStart={(e) => {
           isDragging.current = true;
           const touch = e.touches[0];
-          const container = containerRef.current!;
+          const container = getContainer()!;
           const rect = container.getBoundingClientRect();
           physics.current.x = touch.clientX - rect.left;
           physics.current.y = touch.clientY - rect.top;
@@ -463,7 +465,6 @@ export function IdCard({
             style={{ background: "linear-gradient(90deg, #6EE7F7, #818cf8)" }}
           />
 
-          {/* Pin button */}
           <button
             onClick={handlePin}
             className="absolute top-4 right-3 z-10"

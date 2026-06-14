@@ -217,10 +217,6 @@ export function ProjectsSection() {
       style={{ background: "#09090f", minHeight: "100vh" }}
     >
       {/* Devicons CDN */}
-      <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"
-      />
 
       {/* Grid bg */}
       <div
